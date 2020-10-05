@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,6 +32,32 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1,list);
         //I missed this line and adding item does not write to list_view
         list_view.setAdapter(arrayAdapter);
+
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+               PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+               popupMenu.getMenuInflater().inflate(R.menu.pop_up_menu,popupMenu.getMenu());
+
+               popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                   @Override
+                   public boolean onMenuItemClick(MenuItem item) {
+                       switch (item.getItemId()){
+                           case R.id.item_update:
+                               //function to updat
+                               break;
+                           case R.id.item_delete:
+                               Toast.makeText(MainActivity.this,"Item Deleted", Toast.LENGTH_SHORT).show();
+                               list.remove(position);
+                               arrayAdapter.notifyDataSetChanged();
+                               break;
+                       }
+                       return true;
+                   }
+               });
+               popupMenu.show();
+            }
+        });
 
     }
 
